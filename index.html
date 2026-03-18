@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucesion Ab - Intestato</title>
+
+</head>
+
+
+<body>
+      <h1>Sucecion Ab Intestato</h1>
+
+      <form id="formSucesion">
+
+        <fieldset>
+            <legend>Datos</legend>
+
+
+         <div id="bloqueNombre">  
+            <label>Causante</label>
+            <input type="text" name="causante" required id="inputNombre" placeholder="Ingrese su nombre">
+            <button type="button" id="btnNombreOk">Confirma</button>
+         </div>
+         <div id="nombreGuardado" style="margin-top:5px;"></div>
+         
+         <div id ="estadoCivil">
+            <label>Estado Civil</label>
+            <label><input type="radio" name="estado" id="radioCasado">Casado</label>
+            <label><input type="radio" name="estado" id="radioSoltero">Soltero</label>
+
+           <div id="bloqueConyuge" style="display:none; margin-top:10px;">
+               <p>¿La esposa vive?</p>
+
+               <label><input type="radio" name="conyugeVive" value="si"> Sí</label>
+               <label><input type="radio" name="conyugeVive" value="no"> No</label>
+           </div>
+
+           <div id="hijos">
+            <label>Hijos</label>
+           </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Declaratoria de Herederos</legend>
+        <div id="bloqueHerederos">
+            <h2>Acervo Hereditario</h2>
+
+            <select name="opcionesBienes" id="tipoBien">
+                <option value="">--Seleccione--</option>
+                <option value="inmueble">Inmueble</option>
+                <option value="rodado">Rodado</option>
+                <option value="dinero">Dinero</option>
+                <option value="reajuste">Juicio de Reajuste</option>
+            </select>
+            
+             <button type="button" id="agregarBien">Agregar</button>
+
+             <div id="listaBienes" style="margin-top:10px;"></div>
+        </div>
+             
+        </fieldset>
+
+      </form>
+
+<script src="sucesiones.js"></script>
+</body>
+</html>
