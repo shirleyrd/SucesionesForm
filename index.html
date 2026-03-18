@@ -36,9 +36,30 @@
                <label><input type="radio" name="conyugeVive" value="no"> No</label>
            </div>
 
-           <div id="hijos">
+           <div id="bloqueHijos">
             <label>Hijos</label>
+             <label><input type="radio" name="hijos" value="si"> Sí</label>
+             <label><input type="radio" name="hijos" value="no"> No</label>
            </div>
+           <div id="bloqueCantidadHijos" style="display:none; margin-top:10px;">
+
+        <label>¿Cuántos ?</label>
+
+         <select id="cantidadHijos">
+             <option value="">--Seleccione--</option>
+             <option value="1">1</option>
+             <option value="2">2</option>
+             <option value="3">3</option>
+             <option value="4">4</option>
+             <option value="5">5 o más</option>
+         </select>
+
+    <button type="button" id="btnAplicarHijos">Aplicar</button>
+
+    
+</div>
+
+<div id="cantidadHijosGuardada" style="margin-top:5px;"></div>
         </fieldset>
 
         <fieldset>

@@ -13,6 +13,10 @@ const radioCasado = document.getElementById("radioCasado");
 const radiosEstadoCivil = document.getElementsByName("estado");
 const bloqueConyuge = document.getElementById("bloqueConyuge");
 
+const radiosHijos = document.getElementsByName("hijos");
+const bloqueCantidadHijos = document.getElementById("bloqueCantidadHijos");
+
+
 
 // Apartado Bienes
 
@@ -65,6 +69,52 @@ radiosEstadoCivil.forEach(radio => {
     });
 });
 
+
+//Logica Hijos
+radiosHijos.forEach(radio => {
+    radio.addEventListener("change", () => {
+        if (radio.value === "si") {
+            bloqueCantidadHijos.style.display = "block";
+        } else {
+            bloqueCantidadHijos.style.display = "none";
+        }
+    });
+});
+
+
+
+const cantidadHijosGuardada = document.getElementById("cantidadHijosGuardada");
+
+btnAplicarHijos.addEventListener("click", () => {
+    const cantidad = cantidadHijos.value;
+
+    if (!cantidad) {
+        alert("Seleccione cantidad de hijos");
+        return;
+    }
+
+    // Mostrar valor fijo
+    cantidadHijosGuardada.innerHTML = `
+        <p>
+            <strong>Cantidad de hijos:</strong> ${cantidad}
+            <button id="editarCantidadHijos">Editar</button>
+        </p>
+    `;
+
+    // Ocultar bloque de selección
+    bloqueCantidadHijos.style.display = "none";
+
+    // Mostrar botón cargar nombres
+    bloqueCargarNombres.style.display = "block";
+
+    // Evento editar
+    document.getElementById("editarCantidadHijos").addEventListener("click", () => {
+        bloqueCantidadHijos.style.display = "block";
+        cantidadHijosGuardada.innerHTML = "";
+        bloqueCargarNombres.style.display = "none";
+        contenedorHijos.innerHTML = "";
+    });
+});
 
 //Logica Bienes
 
