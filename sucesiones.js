@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Variables
 
-
+const bienes = [];
 const bloqueNombre = document.getElementById("bloqueNombre");
 const inputNombre = document.getElementById("inputNombre");
 const btnNombreOk = document.getElementById("btnNombreOk");
@@ -13,8 +13,14 @@ const radioCasado = document.getElementById("radioCasado");
 const radiosEstadoCivil = document.getElementsByName("estado");
 const bloqueConyuge = document.getElementById("bloqueConyuge");
 
-const radiosHijos = document.getElementsByName("hijos");
-const bloqueCantidadHijos = document.getElementById("bloqueCantidadHijos");
+//Datos hijos
+const inputCantidadHijos = document.getElementById("inputCantidadHijos");
+const btnConfirmarHijos = document.getElementById("btnConfirmarHijos");
+const cantidadHijosGuardada = document.getElementById("cantidadHijosGuardada");
+
+const bloqueAgregarNombres = document.getElementById("bloqueAgregarNombres");
+const chkAgregarNombres = document.getElementById("chkAgregarNombres");
+const contenedorNombresHijos = document.getElementById("contenedorNombresHijos");
 
 
 
@@ -71,50 +77,90 @@ radiosEstadoCivil.forEach(radio => {
 
 
 //Logica Hijos
-radiosHijos.forEach(radio => {
-    radio.addEventListener("change", () => {
-        if (radio.value === "si") {
-            bloqueCantidadHijos.style.display = "block";
-        } else {
-            bloqueCantidadHijos.style.display = "none";
+ 
+btnConfirmarHijos.addEventListener("click", () => {
+    const cantidad = inputCantidadHijos.value.trim();
+
+        if (!cantidad || cantidad < 0) {
+            alert("Ingrese una cantidad válida");
+            return;
         }
-    });
-});
 
-
-
-const cantidadHijosGuardada = document.getElementById("cantidadHijosGuardada");
-
-btnAplicarHijos.addEventListener("click", () => {
-    const cantidad = cantidadHijos.value;
-
-    if (!cantidad) {
-        alert("Seleccione cantidad de hijos");
-        return;
-    }
-
-    // Mostrar valor fijo
-    cantidadHijosGuardada.innerHTML = `
+        cantidadHijosGuardada.innerHTML =`
         <p>
-            <strong>Cantidad de hijos:</strong> ${cantidad}
+            <strong>Cantidad de Hijos:</strong> ${cantidad}
             <button id="editarCantidadHijos">Editar</button>
-        </p>
-    `;
+        </p>    
+        `;
 
-    // Ocultar bloque de selección
-    bloqueCantidadHijos.style.display = "none";
+    //para ocultar input
+        document.getElementById("bloqueHijos").style.display="none";
 
-    // Mostrar botón cargar nombres
-    bloqueCargarNombres.style.display = "block";
+    //mostrar nombre
+     bloqueAgregarNombres.style.display="block";
 
-    // Evento editar
+
+    //para editar nombres
     document.getElementById("editarCantidadHijos").addEventListener("click", () => {
-        bloqueCantidadHijos.style.display = "block";
+        document.getElementById("bloqueHijos").style.display ="block";
         cantidadHijosGuardada.innerHTML = "";
-        bloqueCargarNombres.style.display = "none";
-        contenedorHijos.innerHTML = "";
+        bloqueAgregarNombres.style.display = "none";
+        contenedorNombresHijos.innerHTML = "";
+        chkAgregarNombres.checked = false;
     });
 });
+
+
+//Mostrar nombres hijos
+
+    chkAgregarNombres.addEventListener ("change", () => {
+        contenedorNombresHijos.innerHTML = "";
+
+        if(chkAgregarNombres.checked) {
+            const cantidad = inputCantidadHijos.value;
+
+            for (let i = 1; i <= cantidad; i++) {
+                const div = document.createElement ("div");
+
+                div.innerHTML = `
+                <label>Hijo ${i}</label>
+                <input type="text" placeholder ="Nombre del Hijo ${i}">
+                <button type="button" class="btnOkNombre">Confirmar</button>
+                <div class="nombreGuardado"></div>
+                `;
+                
+                contenedorNombresHijos.appendChild(div);
+
+                const input =div.querySelector("input");
+                const btnOk = div.querySelector(".btnOkNombre");
+                const nombreGuardado = div.querySelector(".nombreGuardado");
+
+                btnOk.addEventListener("click", () => {
+                    const nombre = input.value.trim();
+
+                    if (!nombre) {
+                        alert("Ingrese un nombre");
+                        return;
+
+                    }
+
+                    nombreGuardado.innerHTML = `<p> ${nombre}</p>`;
+                    input.style.display = "none";
+                    btnOk.style.display = "none";
+                });
+
+            }
+
+            } else {
+                contenedorNombresHijos.innerHTML = "";
+            }
+
+
+
+    });
+
+
+
 
 //Logica Bienes
 
@@ -128,17 +174,29 @@ btnAgregar.addEventListener("click", () => {
             return;
         }
 
-        // 🔹 crear contenedor del bien
+        //  Crear contenedor del bien
         const contenedor = document.createElement("div");
         contenedor.style.border = "1px solid #ccc";
         contenedor.style.padding = "8px";
         contenedor.style.marginTop = "5px";
+        const idUnico = Date.now();
 
         contenedor.innerHTML = `
             <p>
                 <strong>${texto}</strong>
                 <button type="button" class="btnEliminar">❌</button>
             </p>
+
+            <div>
+              <label>
+              <input type="radio" name="tipoOperacion_${idUnico}" value="propio">
+              Propio
+              </label>
+              <label>
+                <input type="radio" name="tipoOperacion_${idUnico}" value="ganancial">
+                Ganancial
+              </label>
+           </div>
 
             <div class="bloqueDetalle">
                 <input type="text" placeholder="Ingrese detalle...">
@@ -152,28 +210,40 @@ btnAgregar.addEventListener("click", () => {
         listaBienes.appendChild(contenedor);
 
         //  lógica del botón OK
-        const input = contenedor.querySelector("input");
+        const input = contenedor.querySelector(".bloqueDetalle input");
         const btnOk = contenedor.querySelector(".btnOkDetalle");
         const detalleGuardado = contenedor.querySelector(".detalleGuardado");
         const bloqueDetalle = contenedor.querySelector(".bloqueDetalle");
         const btnEliminar = contenedor.querySelector(".btnEliminar");
+        
 
         btnEliminar.addEventListener("click", () => {
             contenedor.remove();
         });
 
         btnOk.addEventListener("click", () => {
+            
+            
             const detalle = input.value.trim();
 
             if (!detalle) {
                 alert("Ingrese un detalle");
                 return;
             }
+            const radioSeleccionado = contenedor.querySelector(`input[name="tipoOperacion_${idUnico}"]:checked`);
+            const tipo = radioSeleccionado ? radioSeleccionado.value : "sin especificar";
 
-            detalleGuardado.innerHTML = `<p>${detalle}</p>`;
+            bienes.push({ tipoBien: texto, tipoOperacion: tipo, detalle: detalle });
+
+            detalleGuardado.innerHTML = `
+           <p><strong>Tipo:</strong> ${tipo}</p>
+           <p><strong>Detalle:</strong> ${detalle}</p>
+           `;
 
             // ocultar input después de guardar
             bloqueDetalle.style.display = "none";
+
+            
         });
 
     });

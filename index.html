@@ -36,49 +36,58 @@
                <label><input type="radio" name="conyugeVive" value="no"> No</label>
            </div>
 
-           <div id="bloqueHijos">
-            <label>Hijos</label>
-             <label><input type="radio" name="hijos" value="si"> Sí</label>
-             <label><input type="radio" name="hijos" value="no"> No</label>
+           <div id="bloqueEscribano">
+            <p>¿Tiene escribano?</p>
+            <label><input type="radio" name="escribano" id="radioEscribanoSi">Si</label>
+            <label><input type="radio" name="escribano" id="radioEscribanoNo">No</label>
            </div>
-           <div id="bloqueCantidadHijos" style="display:none; margin-top:10px;">
 
-        <label>¿Cuántos ?</label>
 
-         <select id="cantidadHijos">
-             <option value="">--Seleccione--</option>
-             <option value="1">1</option>
-             <option value="2">2</option>
-             <option value="3">3</option>
-             <option value="4">4</option>
-             <option value="5">5 o más</option>
-         </select>
+         <!--HIJOS-->  
 
-    <button type="button" id="btnAplicarHijos">Aplicar</button>
+         <div id="bloqueHijos">
+            <label>Hijos</label>
+            <p>¿Tiene Hijos?</p>             
+             <input type="number" id="inputCantidadHijos" min=0 placeholder="Indique cantidad">
+             <button type="button" id="btnConfirmarHijos">Confirmar</button>
+         </div>
+
+        <div id="cantidadHijosGuardada" style="margin-top:5px;"></div>
+
+              <div id="bloqueAgregarNombres" style="display:none; margin-top:10px">
+                <label>
+                    <input type="checkbox"  id="chkAgregarNombres">¿Agregar Nombre?
+                </label>
+              </div>
+        
+              <div id="contenedorNombresHijos"></div>        
+
+    
 
     
 </div>
 
-<div id="cantidadHijosGuardada" style="margin-top:5px;"></div>
         </fieldset>
 
+
+
         <fieldset>
-            <legend>Declaratoria de Herederos</legend>
-        <div id="bloqueHerederos">
-            <h2>Acervo Hereditario</h2>
-
-            <select name="opcionesBienes" id="tipoBien">
-                <option value="">--Seleccione--</option>
-                <option value="inmueble">Inmueble</option>
-                <option value="rodado">Rodado</option>
-                <option value="dinero">Dinero</option>
-                <option value="reajuste">Juicio de Reajuste</option>
-            </select>
-            
-             <button type="button" id="agregarBien">Agregar</button>
-
-             <div id="listaBienes" style="margin-top:10px;"></div>
-        </div>
+           <legend>Declaratoria de Herederos</legend>
+           <div id="bloqueHerederos">
+               <h2>Acervo Hereditario</h2>
+   
+               <select name="opcionesBienes" id="tipoBien">
+                   <option value="">--Seleccione--</option>
+                   <option value="inmueble">Inmueble</option>
+                   <option value="rodado">Rodado</option>
+                   <option value="dinero">Dinero</option>
+                   <option value="reajuste">Juicio de Reajuste</option>
+               </select>
+               
+                <button type="button" id="agregarBien">Agregar</button>
+   
+                <div id="listaBienes" style="margin-top:10px;"></div>
+           </div>
              
         </fieldset>
 
