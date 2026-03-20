@@ -1,98 +1,149 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sucesion Ab - Intestato</title>
+  </head>
 
-</head>
+  <body>
+    <h1>Sucecion Ab Intestato</h1>
 
+    <form id="formSucesion">
+      <fieldset>
+        <legend>Datos</legend>
 
-<body>
-      <h1>Sucecion Ab Intestato</h1>
+        <div id="bloqueNombre">
+          <label>Causante</label>
+          <input
+            type="text"
+            name="causante"
+            required
+            id="inputNombre"
+            placeholder="Ingrese su nombre"
+          />
+          <button type="button" id="btnNombreOk">Confirma</button>
+        </div>
+        <div id="nombreGuardado" style="margin-top: 5px"></div>
 
-      <form id="formSucesion">
+        <div id="estadoCivil">
+          <label>Estado Civil</label>
+          <label
+            ><input type="radio" name="estado" id="radioCasado" />Casado</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="estado"
+              id="radioSoltero"
+            />Soltero</label
+          >
 
-        <fieldset>
-            <legend>Datos</legend>
+          <div id="bloqueConyuge" style="display: none; margin-top: 10px">
+            <p>¿La esposa vive?</p>
 
+            <label
+              ><input type="radio" name="conyugeVive" value="si" /> Sí</label
+            >
+            <label
+              ><input type="radio" name="conyugeVive" value="no" /> No</label
+            >
+          </div>
 
-         <div id="bloqueNombre">  
-            <label>Causante</label>
-            <input type="text" name="causante" required id="inputNombre" placeholder="Ingrese su nombre">
-            <button type="button" id="btnNombreOk">Confirma</button>
-         </div>
-         <div id="nombreGuardado" style="margin-top:5px;"></div>
-         
-         <div id ="estadoCivil">
-            <label>Estado Civil</label>
-            <label><input type="radio" name="estado" id="radioCasado">Casado</label>
-            <label><input type="radio" name="estado" id="radioSoltero">Soltero</label>
-
-           <div id="bloqueConyuge" style="display:none; margin-top:10px;">
-               <p>¿La esposa vive?</p>
-
-               <label><input type="radio" name="conyugeVive" value="si"> Sí</label>
-               <label><input type="radio" name="conyugeVive" value="no"> No</label>
-           </div>
-
-           <div id="bloqueEscribano">
+          <div id="bloqueEscribano">
             <p>¿Tiene escribano?</p>
-            <label><input type="radio" name="escribano" id="radioEscribanoSi">Si</label>
-            <label><input type="radio" name="escribano" id="radioEscribanoNo">No</label>
-           </div>
+            <label
+              ><input
+                type="radio"
+                name="escribano"
+                id="radioEscribanoSi"
+              />Si</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="escribano"
+                id="radioEscribanoNo"
+              />No</label
+            >
+          </div>
 
+          <!--HIJOS-->
 
-         <!--HIJOS-->  
-
-         <div id="bloqueHijos">
+          <div id="bloqueHijos">
             <label>Hijos</label>
-            <p>¿Tiene Hijos?</p>             
-             <input type="number" id="inputCantidadHijos" min=0 placeholder="Indique cantidad">
-             <button type="button" id="btnConfirmarHijos">Confirmar</button>
-         </div>
+            <p>¿Tiene Hijos?</p>
+            <input
+              type="number"
+              id="inputCantidadHijos"
+              min="0"
+              placeholder="Indique cantidad"
+            />
+            <button type="button" id="btnConfirmarHijos">Confirmar</button>
+          </div>
 
-        <div id="cantidadHijosGuardada" style="margin-top:5px;"></div>
+          <div id="cantidadHijosGuardada" style="margin-top: 5px"></div>
 
-              <div id="bloqueAgregarNombres" style="display:none; margin-top:10px">
-                <label>
-                    <input type="checkbox"  id="chkAgregarNombres">¿Agregar Nombre?
-                </label>
-              </div>
-        
-              <div id="contenedorNombresHijos"></div>        
+          <div
+            id="bloqueAgregarNombres"
+            style="display: none; margin-top: 10px"
+          >
+            <label>
+              <input type="checkbox" id="chkAgregarNombres" />¿Agregar Nombre?
+            </label>
+          </div>
 
-    
+          <div id="contenedorNombresHijos"></div>
+        </div>
+      </fieldset>
 
-    
-</div>
+      <fieldset>
+        <legend>Declaratoria de Herederos</legend>
+        <div id="bloqueHerederos">
+          <h2>Acervo Hereditario</h2>
 
-        </fieldset>
+          <select name="opcionesBienes" id="tipoBien">
+            <option value="">--Seleccione--</option>
+            <option value="inmueble">Inmueble</option>
+            <option value="rodado">Rodado</option>
+            <option value="dinero">Dinero</option>
+            <option value="reajuste">Juicio de Reajuste</option>
+          </select>
 
+          <button type="button" id="agregarBien">Agregar</button>
 
+          <div id="listaBienes" style="margin-top: 10px"></div>
+        </div>
+      </fieldset>
 
-        <fieldset>
-           <legend>Declaratoria de Herederos</legend>
-           <div id="bloqueHerederos">
-               <h2>Acervo Hereditario</h2>
-   
-               <select name="opcionesBienes" id="tipoBien">
-                   <option value="">--Seleccione--</option>
-                   <option value="inmueble">Inmueble</option>
-                   <option value="rodado">Rodado</option>
-                   <option value="dinero">Dinero</option>
-                   <option value="reajuste">Juicio de Reajuste</option>
-               </select>
-               
-                <button type="button" id="agregarBien">Agregar</button>
-   
-                <div id="listaBienes" style="margin-top:10px;"></div>
-           </div>
-             
-        </fieldset>
+      <fieldset>
+        <legend>Situaciones Especiales</legend>
 
-      </form>
+        <p><strong>Cesión de Derechos</strong></p>
+        <label><input type="radio" name="cesion" value="si" /> Sí</label>
+        <label><input type="radio" name="cesion" value="no" /> No</label>
 
-<script src="sucesiones.js"></script>
-</body>
+        <p style="margin-top: 10px"><strong>Derecho de Usufructo</strong></p>
+        <label><input type="radio" name="usufructo" value="si" /> Sí</label>
+        <label><input type="radio" name="usufructo" value="no" /> No</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Honorarios</legend>
+        <p><strong>Declaratoria:</strong>30 jus</p>
+        <div style="margin-top: 10px">
+          <label>Partición (JUS):</label>
+          <input type="number" id="jusParticion" placeholder="Ingrese JUS" />
+        </div>
+
+        <button type="button" id="btnSumarHonorarios" style="margin-top: 10px">
+          Calcular Total
+        </button>
+
+        <div id="resultadoHonorarios" style="margin-top: 10px"></div>
+      </fieldset>
+    </form>
+
+    <script src="sucesiones.js"></script>
+  </body>
 </html>
