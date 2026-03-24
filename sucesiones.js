@@ -25,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
     "contenedorNombresHijos",
   );
 
-
   //Honorarios
 
   const btnSumar = document.getElementById("btnSumarHonorarios");
@@ -38,23 +37,26 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnAgregar = document.getElementById("agregarBien");
   const listaBienes = document.getElementById("listaBienes");
 
+  //Apartado guardar e imprimir
 
-//Eventos
+  const btnImprimir = document.getElementById("btnImprimir");
+  const btnPDF = document.getElementById("btnPDF");
+  const resultadoFinal = document.getElementById("resultadoFinal");
 
-btnSumar.addEventListener("click", () => {
+  //Eventos
 
-  const jusParticion = parseFloat(inputJus.value) || 0;
-  const declaratoria = 30;
+  btnSumar.addEventListener("click", () => {
+    const jusParticion = parseFloat(inputJus.value) || 0;
+    const declaratoria = 30;
 
-  const total = declaratoria + jusParticion;
+    const total = declaratoria + jusParticion;
 
-  resultado.innerHTML = `
+    resultado.innerHTML = `
     <p><strong>Declaratoria:</strong> ${declaratoria} JUS</p>
     <p><strong>Partición:</strong> ${jusParticion} JUS</p>
     <p><strong>Total:</strong> ${total} JUS</p>
   `;
-});
-  
+  });
 
   btnNombreOk.addEventListener("click", () => {
     const nombre = inputNombre.value.trim();
@@ -149,7 +151,7 @@ btnSumar.addEventListener("click", () => {
         contenedorNombresHijos.appendChild(div);
 
         const input = div.querySelector("input");
-        const btnOk = contenedor.querySelector(".btnGuardarBien");
+        const btnOk = div.querySelector(".btnOkNombre");
         const nombreGuardado = div.querySelector(".nombreGuardado");
 
         btnOk.addEventListener("click", () => {
@@ -223,12 +225,12 @@ btnSumar.addEventListener("click", () => {
     <input type="radio" name="destino_${idUnico}" value="adjudicacion">
     Adjudicación
   </label>
-
-  <button type="button" class="btnConfirmarParticion">Confirmar</button>
 </fieldset>
 
 <div class="bloqueAdjudicatario" style="display:none; margin-top:5px;">
   <input type="text" placeholder="Nombre del adjudicatario">
+  <button type="button" class="btnConfirmarParticion">Confirmar</button>
+  <div class="adjudicatarioGuardado"></div>
 </div>
 
 <button type="button" class="btnGuardarBien">Guardar</button>
@@ -245,35 +247,51 @@ btnSumar.addEventListener("click", () => {
     const detalleGuardado = contenedor.querySelector(".detalleGuardado");
     const bloqueDetalle = contenedor.querySelector(".bloqueDetalle");
     const btnEliminar = contenedor.querySelector(".btnEliminar");
-    const btnConfirmarParticion = contenedor.querySelector(".btnConfirmarParticion");
-    const radiosDestino = contenedor.querySelectorAll(`input[name="destino_${idUnico}"]`);
-    const bloqueAdjudicatario = contenedor.querySelector(".bloqueAdjudicatario");
+    const btnConfirmarParticion = contenedor.querySelector(
+      ".btnConfirmarParticion",
+    );
+    const radiosDestino = contenedor.querySelectorAll(
+      `input[name="destino_${idUnico}"]`,
+    );
+    const bloqueAdjudicatario = contenedor.querySelector(
+      ".bloqueAdjudicatario",
+    );
     const inputAdjudicatario = bloqueAdjudicatario.querySelector("input");
+    const adjudicatarioGuardado = contenedor.querySelector(".adjudicatarioGuardado");
+    
 
 
+    radiosDestino.forEach((radio) => {
+      radio.addEventListener("change", () => {
+        if (radio.value === "adjudicacion" && radio.checked) {
+          bloqueAdjudicatario.style.display = "block";
+          btnConfirmarParticion.style.display = "inline-block";
+        }
 
-    radiosDestino.forEach(radio => {
-  radio.addEventListener("change", () => {
-    if (radio.value === "adjudicacion" && radio.checked) {
-      bloqueAdjudicatario.style.display = "block";
-    } else if (radio.value === "venta" && radio.checked) {
-      bloqueAdjudicatario.style.display = "none";
-      inputAdjudicatario.value = "";
-    }
-  });
-});
+        if (radio.value === "venta" && radio.checked) {
+          bloqueAdjudicatario.style.display = "none";
+          inputAdjudicatario.value = "";
+          btnConfirmarParticion.style.display = "none";
+        }
+      });
+    });
 
-btnConfirmarParticion.addEventListener("click", () => {
+    btnConfirmarParticion.addEventListener("click", () => {
+  const nombre = inputAdjudicatario.value.trim();
 
-  const radioDestino = contenedor.querySelector(`input[name="destino_${idUnico}"]:checked`);
-
-  if (!radioDestino) {
-    alert("Seleccione Venta o Adjudicación");
+  if (!nombre) {
+    alert("Ingrese el nombre del adjudicatario");
     return;
   }
 
-  // Solo feedback visual (NO tocamos nada más)
-  btnConfirmarParticion.textContent = "✔ Confirmado";
+  // Mostrar en pantalla
+  adjudicatarioGuardado.innerHTML = `
+    <p><strong>Adjudicado a:</strong> ${nombre}</p>
+  `;
+
+  // Ocultar input y botón
+  inputAdjudicatario.style.display = "none";
+  btnConfirmarParticion.style.display = "none";
 });
 
     btnEliminar.addEventListener("click", () => {
@@ -294,18 +312,20 @@ btnConfirmarParticion.addEventListener("click", () => {
         ? radioSeleccionado.value
         : "sin especificar";
 
-      const radioDestino = contenedor.querySelector(`input[name="destino_${idUnico}"]:checked`);
-const destino = radioDestino ? radioDestino.value : "sin especificar";
+      const radioDestino = contenedor.querySelector(
+        `input[name="destino_${idUnico}"]:checked`,
+      );
+      const destino = radioDestino ? radioDestino.value : "sin especificar";
 
-const adjudicatario = inputAdjudicatario.value.trim();
+      const adjudicatario = inputAdjudicatario.value.trim();
 
-bienes.push({
-  tipoBien: texto,
-  tipoOperacion: tipo,
-  destino: destino,
-  adjudicatario: adjudicatario,
-  detalle: detalle
-});
+      bienes.push({
+        tipoBien: texto,
+        tipoOperacion: tipo,
+        destino: destino,
+        adjudicatario: adjudicatario,
+        detalle: detalle,
+      });
 
       detalleGuardado.innerHTML = `
 <p><strong>Tipo:</strong> ${tipo}</p>
@@ -318,4 +338,61 @@ ${destino === "adjudicacion" && adjudicatario ? `<p><strong>Adjudicado a:</stron
       bloqueDetalle.style.display = "none";
     });
   });
+
+  function generarInforme() {
+  let html = `<h2>Informe de Sucesión</h2>`;
+
+  // Nombre
+  const nombre = inputNombre.value || "Sin nombre";
+  html += `<p><strong>Causante:</strong> ${nombre}</p>`;
+
+  // Hijos
+  html += `<p><strong>Cantidad de hijos:</strong> ${inputCantidadHijos.value || 0}</p>`;
+
+  // Bienes
+  html += `<h3>Bienes</h3>`;
+
+  bienes.forEach((bien, index) => {
+    html += `
+      <div style="margin-bottom:10px;">
+        <p><strong>Bien ${index + 1}:</strong> ${bien.tipoBien}</p>
+        <p>Tipo: ${bien.tipoOperacion}</p>
+        <p>Destino: ${bien.destino}</p>
+        ${bien.adjudicatario ? `<p>Adjudicado a: ${bien.adjudicatario}</p>` : ""}
+        <p>Detalle: ${bien.detalle}</p>
+      </div>
+    `;
+  });
+
+  resultadoFinal.innerHTML = html;
+}
+
+btnImprimir.addEventListener("click", () => {
+  generarInforme();
+
+  const contenido = resultadoFinal.innerHTML;
+
+  const ventana = window.open("", "", "width=800,height=600");
+
+  ventana.document.write(`
+    <html>
+      <head>
+        <title>Informe</title>
+        <style>
+          body { font-family: Arial; padding: 20px; }
+          h2, h3 { margin-top: 20px; }
+        </style>
+      </head>
+      <body>
+        ${contenido}
+      </body>
+    </html>
+  `);
+
+  ventana.document.close();
+  ventana.print();
+});
+
+
+
 });
