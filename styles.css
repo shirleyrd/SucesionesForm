@@ -1,0 +1,128 @@
+:root {
+  --verde-principal: #0f5c53;
+  --verde-secundario: #146e63;
+  --gris-fondo: #f4f4f4;
+  --blanco: #ffffff;
+  --gris-borde: #dcdcdc;
+  --texto: #1a1a1a;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: linear-gradient(to right, #f4f4f4, #e9ecef);
+  margin: 0;
+  padding: 0;
+  color: var(--texto);
+}
+
+/* TÍTULO */
+h1 {
+  text-align: center;
+  color: var(--verde-principal);
+  margin: 30px 0;
+}
+
+/* CONTENEDOR PRINCIPAL */
+form {
+  max-width: 800px;
+  margin: 40px auto;
+  background: white;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* FIELDSETS */
+fieldset {
+  border: 2px solid var(--verde-principal);
+  border-radius: 10px;
+  background: #f9f9f9;
+  margin-bottom: 25px;
+  padding: 20px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* LEGEND */
+legend {
+  font-weight: bold;
+  color: var(--verde-principal);
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* INPUTS Y SELECTS */
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid var(--gris-borde);
+  font-size: 14px;
+}
+
+
+
+/* RADIO Y CHECKBOX */
+input[type="radio"],
+input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* BOTONES */
+button {
+  background-color: var(--verde-principal);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: var(--verde-secundario);
+}
+
+/* BOTONES PRINCIPALES (abajo) */
+#btnImprimir,
+#btnPDF {
+  margin-right: 10px;
+}
+
+/* BLOQUES INTERNOS (bienes, hijos, etc) */
+#listaBienes > div,
+#contenedorNombresHijos > div {
+  background: #fafafa;
+  border: 1px solid var(--gris-borde);
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+/* TEXTO GUARDADO */
+.detalleGuardado,
+.nombreGuardado,
+#adjudicatarioGuardado {
+  margin-top: 5px;
+  color: var(--verde-principal);
+  font-weight: 500;
+}
+
+.grid-datos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 40px;
+  margin-bottom: 15px;
+}
+
+.bloque-bien {
+  margin-bottom: 10px;
+}

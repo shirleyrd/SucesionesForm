@@ -339,34 +339,79 @@ ${destino === "adjudicacion" && adjudicatario ? `<p><strong>Adjudicado a:</stron
     });
   });
 
-  function generarInforme() {
-  let html = `<h2>Informe de Sucesión</h2>`;
+function generarInforme() {
+  let html = `<h2 style="text-align:center;">Informe de Sucesión</h2><hr>`;
 
-  // Nombre
+  // Datos
   const nombre = inputNombre.value || "Sin nombre";
-  html += `<p><strong>Causante:</strong> ${nombre}</p>`;
+  const estado = document.querySelector('input[name="estado"]:checked');
+  const estadoTexto = estado
+    ? (estado.id === "radioCasado" ? "Casado" : "Soltero")
+    : "No especificado";
+
+  const escribano = document.querySelector('input[name="escribano"]:checked');
+  const conyuge = document.querySelector('input[name="conyugeVive"]:checked');
+
+  html += `
+    <h3>Datos generales</h3>
+    <p>
+      <strong>Causante:</strong> ${nombre} &nbsp;&nbsp;&nbsp;
+      <strong>Estado civil:</strong> ${estadoTexto}
+    </p>
+    <p>
+      <strong>Escribano:</strong> ${escribano ? escribano.value : "No"} &nbsp;&nbsp;&nbsp;
+      <strong>Cónyuge vive:</strong> ${conyuge ? conyuge.value : "-"}
+    </p>
+  `;
 
   // Hijos
-  html += `<p><strong>Cantidad de hijos:</strong> ${inputCantidadHijos.value || 0}</p>`;
+  const cantidad = inputCantidadHijos.value || 0;
+  const nombresHijos = document.querySelectorAll("#contenedorNombresHijos .nombreGuardado p");
+
+  let listaNombres = [];
+  nombresHijos.forEach(h => listaNombres.push(h.textContent));
+
+  html += `
+    <h3>Hijos</h3>
+    <p><strong>Cantidad:</strong> ${cantidad}</p>
+    <p><strong>Nombres:</strong> ${listaNombres.join(", ") || "-"}</p>
+  `;
+
+  // Situaciones
+  const cesion = document.querySelector('input[name="cesion"]:checked');
+  const usufructo = document.querySelector('input[name="usufructo"]:checked');
+
+  html += `
+    <h3>Situaciones</h3>
+    <p><strong>Cesión:</strong> ${cesion ? cesion.value : "No especificado"}</p>
+    <p><strong>Usufructo:</strong> ${usufructo ? usufructo.value : "No especificado"}</p>
+  `;
 
   // Bienes
-  html += `<h3>Bienes</h3>`;
+  // Bienes
+html += `<h3>Bienes</h3>`;
+html += `<div class="grid-bienes">`;
 
-  bienes.forEach((bien, index) => {
-    html += `
-      <div style="margin-bottom:10px;">
-        <p><strong>Bien ${index + 1}:</strong> ${bien.tipoBien}</p>
-        <p>Tipo: ${bien.tipoOperacion}</p>
-        <p>Destino: ${bien.destino}</p>
-        ${bien.adjudicatario ? `<p>Adjudicado a: ${bien.adjudicatario}</p>` : ""}
-        <p>Detalle: ${bien.detalle}</p>
-      </div>
-    `;
-  });
+bienes.forEach((bien, index) => {
+  html += `
+    <div class="bien-item">
+      <strong>${index + 1}. ${bien.tipoBien}</strong><br>
+      Tipo: ${bien.tipoOperacion}<br>
+      Destino: ${bien.destino}
+      ${bien.adjudicatario ? `<br>A: ${bien.adjudicatario}` : ""}
+      <br>Detalle: ${bien.detalle}
+    </div>
+  `;
+});
+
+html += `</div>`;
+
+  // Honorarios
+  html += `<h3>Honorarios</h3>`;
+  html += resultado.innerHTML || "<p>No calculados</p>";
 
   resultadoFinal.innerHTML = html;
 }
-
 btnImprimir.addEventListener("click", () => {
   generarInforme();
 
@@ -379,9 +424,72 @@ btnImprimir.addEventListener("click", () => {
       <head>
         <title>Informe</title>
         <style>
-          body { font-family: Arial; padding: 20px; }
-          h2, h3 { margin-top: 20px; }
-        </style>
+  body { 
+    font-family: Arial, sans-serif; 
+    padding: 25px;
+    line-height: 1.5;
+    color: #000;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  h3 {
+    margin-top: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 3px;
+  }
+
+  p {
+    margin: 5px 0;
+  }
+
+  hr {
+    margin: 10px 0 20px 0;
+  }
+
+  .grid-bienes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 30px;
+  margin-top: 10px;
+}
+
+.bien-item {
+  break-inside: avoid;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+  /* 👇 ESTO ES LO NUEVO */
+  @media print {
+    body {
+      padding: 10px;
+      font-size: 12px;
+    }
+
+    h2 {
+      font-size: 16px;
+    }
+
+    h3 {
+      font-size: 13px;
+    }
+
+    p {
+      font-size: 12px;
+    }
+
+    #listaBienes {
+     display: grid;
+     grid-template-columns: repeat(2, minmax(0, 1fr));
+     gap: 15px;
+     width: 100%;
+   }
+  }
+</style>
       </head>
       <body>
         ${contenido}
