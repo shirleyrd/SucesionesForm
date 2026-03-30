@@ -26,12 +26,29 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 
   //Honorarios
+  const inputMontoHonorario = document.getElementById("inputMontoHonorario");
+  const inputConceptoHonorario = document.getElementById("inputConceptoHonorario");
+  const btnAgregarHonorario = document.getElementById("btnAgregarHonorario");
+  const listaHonorarios = document.getElementById("listaHonorarios");
 
-  const btnSumar = document.getElementById("btnSumarHonorarios");
-  const inputJus = document.getElementById("jusParticion");
-  const resultado = document.getElementById("resultadoHonorarios");
+  let honorarios = [];
 
-  // Apartado Bienes
+
+//Escribano
+
+const radioEscribanoSi = document.getElementById("radioEscribanoSi");
+const radioEscribanoNo = document.getElementById("radioEscribanoNo");
+
+const bloqueNombreEscribano = document.getElementById("bloqueNombreEscribano");
+const bloqueBuscaEscribano = document.getElementById("bloqueBuscaEscribano");
+
+
+const inputNombreEscribano = document.getElementById("inputNombreEscribano");
+const btnGuardarEscribano = document.getElementById("btnGuardarEscribano");
+const escribanoGuardado = document.getElementById("escribanoGuardado");
+
+
+ // Apartado Bienes
 
   const tipoBien = document.getElementById("tipoBien");
   const btnAgregar = document.getElementById("agregarBien");
@@ -45,18 +62,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
   //Eventos
 
-  btnSumar.addEventListener("click", () => {
-    const jusParticion = parseFloat(inputJus.value) || 0;
-    const declaratoria = 30;
+  btnAgregarHonorario.addEventListener("click", () => {
+  const monto = parseFloat(inputMontoHonorario.value);
+  const concepto = inputConceptoHonorario.value.trim();
 
-    const total = declaratoria + jusParticion;
+  if (!monto || monto <= 0) {
+    alert("Ingrese un monto válido");
+    return;
+  }
 
-    resultado.innerHTML = `
-    <p><strong>Declaratoria:</strong> ${declaratoria} JUS</p>
-    <p><strong>Partición:</strong> ${jusParticion} JUS</p>
-    <p><strong>Total:</strong> ${total} JUS</p>
-  `;
-  });
+  if (!concepto) {
+    alert("Ingrese un concepto");
+    return;
+  }
+
+  honorarios.push({ monto, concepto });
+
+  renderHonorarios();
+
+  // 🔥 limpiar inputs
+  inputMontoHonorario.value = "";
+  inputConceptoHonorario.value = "";
+});
+
+  
 
   btnNombreOk.addEventListener("click", () => {
     const nombre = inputNombre.value.trim();
@@ -77,6 +106,55 @@ document.addEventListener("DOMContentLoaded", function () {
       bloqueNombre.style.display = "block";
     });
   });
+
+
+  btnGuardarEscribano.addEventListener("click", () => {
+  const nombre = inputNombreEscribano.value.trim();
+
+  if (!nombre) {
+    alert("Ingrese el nombre del escribano");
+    return;
+  }
+
+  escribanoGuardado.innerHTML = `
+    <p><strong>Escribano:</strong> ${nombre}
+    <button id="editarEscribano">Editar</button></p>
+  `;
+
+  inputNombreEscribano.style.display = "none";
+  btnGuardarEscribano.style.display = "none";
+
+  document.getElementById("editarEscribano").addEventListener("click", () => {
+    inputNombreEscribano.style.display = "inline";
+    btnGuardarEscribano.style.display = "inline";
+  });
+});
+
+
+
+  //Logica escribano
+
+
+
+radioEscribanoSi.addEventListener("change", () => {
+  if (radioEscribanoSi.checked) {
+    bloqueNombreEscribano.style.display = "block";
+    bloqueBuscaEscribano.style.display = "none";
+
+    // limpiar busca
+    document.querySelectorAll('input[name="buscaEscribano"]').forEach(r => r.checked = false);
+  }
+});
+
+radioEscribanoNo.addEventListener("change", () => {
+  if (radioEscribanoNo.checked) {
+    bloqueNombreEscribano.style.display = "none";
+    bloqueBuscaEscribano.style.display = "block";
+
+    // limpiar nombre
+    document.getElementById("inputNombreEscribano").value = "";
+  }
+});
 
   //Logica Datos
 
@@ -339,6 +417,29 @@ ${destino === "adjudicacion" && adjudicatario ? `<p><strong>Adjudicado a:</stron
     });
   });
 
+function renderHonorarios() {
+  let total = 30; // declaratoria fija
+
+  let html = `<p><strong>Declaratoria:</strong> 30 JUS</p>`;
+
+  honorarios.forEach((h, index) => {
+    total += h.monto;
+
+    html += `
+      <p>
+        ${h.concepto}: ${h.monto} JUS
+        <button onclick="eliminarHonorario(${index})">❌</button>
+      </p>
+    `;
+  });
+
+  html += `<p><strong>Total:</strong> ${total} JUS</p>`;
+
+  listaHonorarios.innerHTML = html;
+}
+
+
+
 function generarInforme() {
   let html = `<h2 style="text-align:center;">Informe de Sucesión</h2><hr>`;
 
@@ -349,7 +450,37 @@ function generarInforme() {
     ? (estado.id === "radioCasado" ? "Casado" : "Soltero")
     : "No especificado";
 
-  const escribano = document.querySelector('input[name="escribano"]:checked');
+  const escribanoSeleccion = document.querySelector('input[name="escribano"]:checked');
+let escribanoTexto = "No especificado";
+
+if (escribanoSeleccion) {
+
+  if (escribanoSeleccion.value === "si") {
+
+    let nombreEscribano = "";
+    const bloque = document.querySelector("#escribanoGuardado p");
+
+    if (bloque) {
+      nombreEscribano = bloque.textContent
+        .replace("Editar", "")
+        .replace("Escribano:", "")
+        .trim();
+    }
+
+    escribanoTexto = nombreEscribano ? `Sí (${nombreEscribano})` : "Sí";
+
+  } else {
+
+    const busca = document.querySelector('input[name="buscaEscribano"]:checked');
+
+    if (busca) {
+      escribanoTexto = `No (Busca: ${busca.value})`;
+    } else {
+      escribanoTexto = "No";
+    }
+
+  }
+}
   const conyuge = document.querySelector('input[name="conyugeVive"]:checked');
 
   html += `
@@ -359,7 +490,7 @@ function generarInforme() {
       <strong>Estado civil:</strong> ${estadoTexto}
     </p>
     <p>
-      <strong>Escribano:</strong> ${escribano ? escribano.value : "No"} &nbsp;&nbsp;&nbsp;
+      <strong>Escribano:</strong> ${escribanoTexto}
       <strong>Cónyuge vive:</strong> ${conyuge ? conyuge.value : "-"}
     </p>
   `;
@@ -407,11 +538,23 @@ bienes.forEach((bien, index) => {
 html += `</div>`;
 
   // Honorarios
-  html += `<h3>Honorarios</h3>`;
-  html += resultado.innerHTML || "<p>No calculados</p>";
+
+ html += `<h3>Honorarios</h3>`;
+
+let total = 30;
+
+html += `<p><strong>Declaratoria:</strong> 30 JUS</p>`;
+
+honorarios.forEach(h => {
+  total += h.monto;
+  html += `<p>${h.concepto}: ${h.monto} JUS</p>`;
+});
+
+html += `<p><strong>Total:</strong> ${total} JUS</p>`;
 
   resultadoFinal.innerHTML = html;
 }
+
 btnImprimir.addEventListener("click", () => {
   generarInforme();
 
@@ -502,5 +645,8 @@ btnImprimir.addEventListener("click", () => {
 });
 
 
-
+window.eliminarHonorario = function (index) {
+  honorarios.splice(index, 1);
+  renderHonorarios();
+}
 });

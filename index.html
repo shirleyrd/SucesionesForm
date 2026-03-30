@@ -55,7 +55,7 @@
             <p>¿Tiene escribano?</p>
             <label
               ><input
-                type="radio"
+                type="radio" value="si"
                 name="escribano"
                 id="radioEscribanoSi"
               />Si</label
@@ -63,11 +63,28 @@
             <label
               ><input
                 type="radio"
+                value="no"
                 name="escribano"
                 id="radioEscribanoNo"
               />No</label
             >
           </div>
+
+          <!-- SI TIENE ESCRIBANO -->
+           <div id="bloqueNombreEscribano" style="display:none; margin-top:10px;">
+           <input type="text" id="inputNombreEscribano" placeholder="Nombre del escribano">
+           <button type="button" id="btnGuardarEscribano">Confirmar</button>
+
+          <div id="escribanoGuardado"></div>
+          </div>
+
+           <!-- SI NO TIENE -->
+           <div id="bloqueBuscaEscribano" style="display:none; margin-top:10px;">
+             <p>¿Busca escribano?</p>
+             <label><input type="radio" name="buscaEscribano" value="si"> Sí</label>
+             <label><input type="radio" name="buscaEscribano" value="no"> No</label>
+             <label><input type="radio" name="buscaEscribano" value="indiferente"> Indiferente</label>
+           </div>
 
           <!--HIJOS-->
 
@@ -132,15 +149,17 @@
         <legend>Honorarios</legend>
         <p><strong>Declaratoria:</strong>30 jus</p>
         <div style="margin-top: 10px">
-          <label>Partición (JUS):</label>
-          <input type="number" id="jusParticion" placeholder="Ingrese JUS" />
+        <label>Monto (JUS):</label>
+        <input type="number" id="inputMontoHonorario" placeholder="Ingrese monto" />
+
+        <label>Concepto:</label>
+        <input type="text" id="inputConceptoHonorario" placeholder="Ej: Partición inmueble" />
+
+        <button type="button" id="btnAgregarHonorario">Agregar</button>
         </div>
 
-        <button type="button" id="btnSumarHonorarios" style="margin-top: 10px">
-          Calcular Total
-        </button>
-
-        <div id="resultadoHonorarios" style="margin-top: 10px"></div>
+<div id="listaHonorarios" style="margin-top: 10px"></div>
+        
       </fieldset>
 
       <div id="resultadoFinal" style="display:none;"></div>
